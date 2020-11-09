@@ -74,7 +74,7 @@ func storeInDatabase(car Car) {
 }
 
 func main() {
-	fmt.Println("POST Server Running...	")
+	fmt.Println("POST Server Running...	Hola")
 	http.HandleFunc("/service/v1/cars", carPosterHandler)
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }
