@@ -31,10 +31,9 @@ pipeline {
         stage('Dockerize') {
             steps{
                 sh 'docker build -t post:v1.0 .'
+                sh 'docker tag post:v1.0 192.168.176.144:5000/post1:latest'
+                sh 'docker push 192.168.176.144:5000/post1:latest'
             }
-            
-        }
-        
+        }        
     }
-    
 }
