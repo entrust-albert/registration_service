@@ -1,10 +1,10 @@
 # Exercice 6: CI/CD
 
-This exercice aims to understand the Continious Integration and Continous Delivery/Deployment. 
+This exercice aims to understand the Continious Integration and Continous Delivery/Deployment. The following image represents the structure of the system. 
 
-<img src="exercice6-diagram.jpg" alt="drawing" width="350"/>
+<img src="exercice6-diagram.jpg" alt="scheme" width="350"/>
 
-Three VMs were created, one working as the client, one for the Jenkins and another one with the Docker registry and the service. This document exposes the processes followed to deploy this system, as well as some tips and notes. 
+Three VMs were created, one working as the client, one for the Jenkins and another one with the Docker Registry and the services. This document exposes the processes followed to deploy this system, as well as some tips and notes. 
 
 ## Jenkins VM
 A Jenkins Docker was installed using the following command: 
