@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    tools {
+        dockerTool 'docker'
+    }
+    environment{
+        DOCKER_HOST = '192.168.176.144'
+    }
+    stages {
+        stage ('Pulling Image'){
+            steps {
+                echo 'Pulling Image'
+                sh 'docker pull 192.168.176.144:5000/post1:latest'
+            }
+            
+        }
+
+        stage ('Stop and Remove'){
+            steps {
+                sh 'docker stop post1'
+                sh 'docker rm post1'
+            }
+        }
+        
+        stage ('Run new image'){
+            steps {
+                sh 'docker run --network="network1" --name="post1" -d -p 8082:8082 192.168.176.144:5000/post1:latest'
+            }
+        }
+    }
+}
