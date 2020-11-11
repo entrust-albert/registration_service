@@ -20,5 +20,6 @@ Once it is deployed, the insecure registry list has to be updated. From both the
 }
 ```
 
-
 Then run: `sudo systemctl daemon-reload` and `systemctl restart docker`. 
+
+## 
