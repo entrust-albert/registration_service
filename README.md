@@ -37,6 +37,8 @@ This pipeline was chosen to be multibranch in order to easily enable the source 
 
 The pipeline source code was uploaded to the repository as a Jenkinsfile, as well as the code for the service (main.go and Dockerfile). 
 
+**Note:** When uploading the files to GitHub, it is important to note that the branch was set to "master" instead of "main": `git branch -M master`, to avoid problems with Jenkins. 
+
 If everything was configured properly, from now on, everytime the user commits and pushes a modification from the code, this pipeline automatically scans, reads, builds and posts the new image. 
 
 ### Registration Publish Pipeline
@@ -58,15 +60,55 @@ http://192.168.176.144:5000/v2/_catalog
 
 `docker push 192.168.176.144:5000/post1:latest`
 
-In final stages of the exercice, in order to be able to connect to this VM to perform the pull and run commands, one must enable the remote docker API, which is explained in the following link: https://blog.usejournal.com/how-to-enable-docker-remote-api-on-docker-host-7b73bd3278c6
+In final stages of the exercice, in order to be able to connect to this VM to perform the pull and run commands, one must enable the remote docker API, which is explained in the following link: https://blog.usejournal.com/how-to-enable-docker-remote-api-on-docker-host-7b73bd3278c6. Then run: `sudo systemctl daemon-reload` and `systemctl restart docker` again to acknowledge the changes.
 
 Once everything is properly configured, some manual actions need to be done:
 * Create a network so that the containers can communicate between them.
 * Manually deploy the MariaDB and Nginx services.
 * Run the Post and Get containers, since the pipeline will always first try to stop and remove active containers before running its own one. In case no containers are found, it will give an error. 
 
+## Testing
+The admin can perform a change to the services code. Since Jenkins is periodically scanning the repository, it automatically detects any modification and a new container for the service is built and deployed. 
 
+The client can send a POST petition to the Nginx IP using cURL, where each of the services is redirected to its own container. Example cURL: 
+```
+curl --location --request POST '192.168.176.144:8083/service/v1/cars' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "brand": "Audi",
+    "model": "Pi314",
+    "horsePower": 271
+}'
+```
 
+Then, a GET petition can be sent as well to obtain a registered car if the ID is known. Example cURL:
+
+`curl --location --request GET '192.168.176.144:8083/service/v1/cars/285990'`
+
+## Useful Commands for Testing
+### MariaDB
+`sudo docker build -t mariadb-ct .`(from the MariaDB directory)
+
+`sudo docker run --name="mariadb1" --network="network1" -d mariadb-ct`
+
+`sudo docker exec -it mariadb1 mysql -u root -p` (to enter the MariaDB CLI)
+
+### Nginx
+`docker build -t nginx:v1.0 .`
+
+`docker run --network="network1" --name="nginx" -i -t -p 8083:8083 nginx:v1.0` (in this example, configured to listen port 8083)
+
+`docker exec -ti some-nginx bash` (useful to enter the container bash)
+
+### POST 
+`docker build -t post:v1.0 .`
+
+`docker run --network="network1" --name="post1" -i -t -p 8082:8082 post:v1.0` (in this example, configured to listen port 8082)
+
+### GET 
+`docker build -t get:v1.0 .`
+
+`docker run --network="network1" --name="get1" -i -t -p 8081:8081 get:v1.0` (in this example, configured to listen port 8081)
 
 
 
