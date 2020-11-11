@@ -7,7 +7,7 @@ This exercice aims to understand the Continious Integration and Continous Delive
 Three VMs were created, one working as the client, one for the Jenkins and another one with the Docker Registry and the services. This document exposes the processes followed to deploy this system, as well as some tips and notes. 
 
 ## Jenkins VM
-A Jenkins Docker was installed using the following command: 
+The Long Term Suport (LTS) docker from Jenkins was deployed using the following command: 
 
 `sudo docker run -p 8080:8080 -p 50000:50000 --name="jenkinsDocker" -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts`
 
