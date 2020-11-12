@@ -15,7 +15,7 @@ Then, the correct permissions for Docker have to be given:
 
 `chmod 777 /var/run/docker.sock`
 
-**Note:** It is really important to add this specific volume (`-v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts`) when running the docker or it won't have the right permissions. 
+**Note:** It is really important to add this specific volume (`-v /var/run/docker.sock:/var/run/docker.sock`) when running the docker or it won't have the right permissions. 
 
 Once it is deployed, the insecure registry list has to be updated. From both the Jenkins VM and the Docker Registry VM, go to: `/etc/docker/daemon.json` and add the IP from the Docker Registry VM: 
 ```
